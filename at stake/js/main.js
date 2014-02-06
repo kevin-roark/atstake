@@ -87,13 +87,13 @@ require(
 
     var playerBehavior = Physics.behavior('player-behavior', { player: ship });
 
-    // create evil ufos
-    var ufos = [];
+    // create trash
+    var trash = [];
     for (var i = 0, l = 30; i < l; ++i){
         var ang = 4 * (Math.random() - 0.5) * Math.PI;
         var r = 700 + 100 * Math.random() + i * 10;
 
-        ufos.push( Physics.body('ufo', {
+        trash.push( Physics.body('trash', {
             x: 400 + Math.cos( ang ) * r,
             y: 300 + Math.sin( ang ) * r,
             vx: 0.03 * Math.sin( ang ),
@@ -115,16 +115,6 @@ require(
     });
     planet.view = new Image();
     planet.view.src = require.toUrl('images/planet.png');
-
-    // count number of ufos destroyed
-    var killCount = 0;
-    world.subscribe('blow-up', function( data ){
-
-        killCount++;
-        if ( killCount === ufos.length ){
-            world.publish('win-game');
-        }
-    });
 
     // blow up anything that touches a laser pulse
     world.subscribe('collisions:detected', function( data ){
@@ -209,7 +199,7 @@ require(
       Physics.behavior('body-impulse-response'),
       renderer
     ]);
-    world.add(ufos);
+    world.add(trash);
   };
   
   var world = null;

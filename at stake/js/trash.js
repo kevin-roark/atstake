@@ -18,7 +18,7 @@ y: 0.18375671821419334 \
 "
     var TRASH_IMAGES = ['images/ufo.png'];
 
-    Physics.body('ufo', 'circle', function( parent ){
+    Physics.body('trash', 'circle', function( parent ){
         var ast1 = new Image();
         ast1.src = require.toUrl('images/ufo.png');
 
