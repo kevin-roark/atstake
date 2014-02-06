@@ -31,7 +31,7 @@ y: 0.18375671821419334 \
                 im.src = require.toUrl(im_path);
                 this.view = im;
 
-                self.gameType = 'trash';
+                this.gameType = 'trash';
             },
             getKicked: function(collisionDetails) {
                 var self = this;

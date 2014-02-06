@@ -6,6 +6,13 @@ function(
     Physics
 ){
 
+    var UP_CODE = 38;
+    var DOWN_CODE = 40;
+    var LEFT_CODE = 37;
+    var RIGHT_CODE = 39;
+    var Z_CODE = 90;
+    var SPACE_CODE = 32;
+
     return Physics.behavior('player-behavior', function( parent ){
 
         return {
@@ -23,20 +30,20 @@ function(
                         return;
                     }
                     switch ( e.keyCode ){
-                        case 38: // up
+                        case UP_CODE:
                             self.movePlayer(true);
-                        break;
-                        case 40: // down
-                        break;
-                        case 37: // left
+                            break;
+                        case DOWN_CODE:
+                            break;
+                        case LEFT_CODE:
                             player.turn( -1 );
-                        break;
-                        case 39: // right
+                            break;
+                        case RIGHT_CODE:
                             player.turn( 1 );
-                        break;
-                        case 90: // z
+                            break;
+                        case Z_CODE:
                             player.shoot();
-                        break;
+                            break;
                     }
                     return false;
                 });
@@ -45,19 +52,19 @@ function(
                         return;
                     }
                     switch ( e.keyCode ){
-                        case 38: // up
+                        case UP_CODE:
                             self.movePlayer(false);
-                        break;
-                        case 40: // down
-                        break;
-                        case 37: // left
+                            break;
+                        case DOWN_CODE:
+                            break;
+                        case LEFT_CODE:
                             player.turn( 0 );
-                        break;
-                        case 39: // right
+                            break;
+                        case RIGHT_CODE:
                             player.turn( 0 );
-                        break;
-                        case 32: // space
-                        break;
+                            break;
+                        case SPACE_CODE:
+                            break;
                     }
                     return false;
                 });
@@ -91,23 +98,19 @@ function(
                     ,player = this.player
                     ;
 
-                for ( var i = 0, l = collisions.length; i < l; ++i ){
-                    col = collisions[ i ];
+                for (var i = 0, l = collisions.length; i < l; ++i){
+                    col = collisions[i];
 
-                    // if we aren't looking at debris
-                    // and one of these bodies is the player...
-                    if ( col.bodyA.gameType !== 'debris' && 
-                        col.bodyB.gameType !== 'debris' && 
-                        (col.bodyA === player || col.bodyB === player) 
-                    ){
-                        player.blowUp();
-                        world.removeBehavior( this );
-                        this.gameover = true;
-
-                        // when we crash, we'll publish an event to the world
-                        // that we can listen for to prompt to restart the game
-                        world.publish('lose-game');
-                        return;
+                    // if one event is trash and the other is player
+                    if ((col.bodyA.gameType === 'trash' && col.bodyB === player) ||
+                        (col.bodyA === player && col.bodyB.gameType === 'trash')
+                    ) {
+                        if (col.bodyA === player) {
+                            col.bodyB.getKicked(col);
+                        }
+                        else {
+                            col.bodyA.getKicked(col);
+                       }
                     }
                 }
             },
