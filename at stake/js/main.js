@@ -12,6 +12,7 @@ require(
   'physicsjs',
   
   // custom extensions
+  'js/camera',
   'js/player',
   'js/player-behavior',
   'js/trash',
@@ -183,7 +184,7 @@ require(
           x: 0.5 * window.innerWidth, 
           y: 0.5 * window.innerHeight
       };
-      // follow player
+      // follow player with camera
       renderer.options.offset.clone( middle ).vsub( ship.state.pos );
       world.render();
     });

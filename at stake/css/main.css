@@ -5,7 +5,25 @@ html, body {
     height: 100%;
     overflow: hidden;
 }
-body:after {
+
+body {
+  background-image: url(../images/iceweasel_background.png);
+  background-repeat: repeat;
+}
+
+  body.before-game:after {
+    content: 'press "z" to start';
+  }
+
+  body.lose-game:after {
+    content: 'press "z" to try again';
+  }
+
+  body.win-game:after {
+    content: 'Win! press "z" to play again';
+  }
+
+  body:after {
     font-size: 30px;
     line-height: 140px;
     text-align: center;
@@ -19,31 +37,4 @@ body:after {
     margin-left: -200px;
     margin-top: -70px;
     border-radius: 5px;
-}
-body.before-game:after {
-    content: 'press "z" to start';
-}
-body.lose-game:after {
-    content: 'press "z" to try again';
-}
-body.win-game:after {
-    content: 'Win! press "z" to play again';
-}
-body {
-    background: url(../images/starfield.png) 0 0 repeat;
-}
-.canvas-wrapper {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    width: 1280px;
-}
-#display {
-    display: block;
-    background: #000;
-    width: 1280px;
-    height: 450px;
-}
-
-
+  }
