@@ -56,7 +56,6 @@ function(
                 // if we're accelerating change the image
                 if (amount){
                     this.view = shipThrustImg;
-                    console.log(this.state);
                 } else {
                     this.view = playerImg;
                 }

@@ -84,28 +84,30 @@ require(
     renderer.el.height = bounds.height;
   });
   
-  var init = function init(world, Physics){
-    var worldBounds = Physics.aabb(-bounds.width * 2, 0, bounds.width * 4, bounds.height);
+  var init = function init(world, Physics) {
+    var worldX = -bounds.width * 2;
+    var worldY = 0;
+    var worldWidth = bounds.width * 4;
+    var worldHeight = bounds.height;
+    var worldBounds = Physics.aabb(worldX, worldY, worldWidth, worldHeight);
 
     var player = Physics.body('player', {
       x: 100,
-      y: bounds.height,
-      restitution: 0.1,
-      mass: 5
+      y: bounds.height - 50,
+      restitution: 0.01,
+      mass: 0.1
     });
     var playerBehavior = Physics.behavior('player-behavior', { player: player });
 
     // create trash
     var trash = [];
     for (var i = 0, l = 20; i < l; i++) {
-        var ang = 4 * (Math.random() - 0.5) * Math.PI;
-        var r = 700 + 100 * Math.random() + i * 10;
-
+        var x = worldX + (Math.random() * worldWidth);
         trash.push(Physics.body('trash', {
-            x: -bounds.width*2 + (Math.random() * worldBounds.width),
-            y: 0,
+            x: x,
+            y: bounds.height - 50,
             radius: 50,
-            mass: 1,
+            mass: 0.001,
             restitution: 1.0
         }));
     }
@@ -127,8 +129,11 @@ require(
           x: 0.5 * window.innerWidth, 
           y: 0.75 * window.innerHeight
       };
+      var oldY = renderer.options.offset._[1];
       // follow player with camera
-      //renderer.options.offset.clone( middle ).vsub( player.state.pos );
+      renderer.options.offset.clone( middle ).vsub(player.state.pos);
+      // reset the y
+      renderer.options.offset._[1] = oldY;
       world.render();
     });
     
