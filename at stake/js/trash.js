@@ -8,14 +8,6 @@ function(
     require,
     Physics
 ){
-
-" Shooting to right, body A laser: \
-x: 0.9962641480497211 \
-y: -0.08635824981299332 \
-Shooting to left, body B laser: \
-x: 0.9829717536690205 \
-y: 0.18375671821419334 \
-"
     var TRASH_IMAGES = ['images/ufo.png'];
 
     Physics.body('trash', 'circle', function( parent ){
@@ -34,6 +26,7 @@ y: 0.18375671821419334 \
                 this.gameType = 'trash';
             },
             getKicked: function(collisionDetails) {
+                /*
                 var self = this;
                 var world = self._world;
                 if (!world) {
@@ -54,8 +47,8 @@ y: 0.18375671821419334 \
 
                 self.accelerate(accelerationVector);
                 scratch.done();
-
-                return self;
+                */
+                return this;
             }
         };
     });

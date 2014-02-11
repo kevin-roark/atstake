@@ -16,13 +16,17 @@ require(
   'js/player',
   'js/player-behavior',
   'js/trash',
+  'js/jquery.min',
 
-  // official modules
+  // drawing
   'physicsjs/renderers/canvas',
   'physicsjs/bodies/circle',
   'physicsjs/bodies/convex-polygon',
-  'physicsjs/behaviors/newtonian',
+
+  // physics styles
   'physicsjs/behaviors/sweep-prune',
+  'physicsjs/behaviors/constant-acceleration',
+  'physicsjs/behaviors/edge-collision-detection',
   'physicsjs/behaviors/body-collision-detection',
   'physicsjs/behaviors/body-impulse-response'
 ], function(
@@ -33,12 +37,14 @@ require(
 
   document.body.className = 'before-game';
 
-  var par = parent;
-  try {
-    par && par.innerWidth;
-  } catch( e ){
-    par = window;
+  var bounds;
+  function set_bounds() {
+    bounds = {
+      width: window.innerWidth,
+      height: Math.min(700, window.innerHeight)
+    };
   }
+  set_bounds();
 
   var inGame = false;
 
@@ -52,8 +58,8 @@ require(
   
   var renderer = Physics.renderer('canvas', {
     el: 'viewport',
-    width: par.innerWidth,
-    height: par.innerHeight,
+    width: bounds.width,
+    height: bounds.height,
     // meta: true,
     // debug:true,
     styles: {
@@ -73,62 +79,40 @@ require(
   });
   
   window.addEventListener('resize', function(){
-    renderer.el.width = par.innerWidth;
-    renderer.el.height = par.innerHeight;
+    set_bounds();
+    renderer.el.width = bounds.width;
+    renderer.el.height = bounds.height;
   });
   
   var init = function init(world, Physics){
-  
-    var player = Physics.body('player', {
-      x: 400,
-      y: 100,
-      mass: 10000,
-      restitution: 0
-    });
+    var worldBounds = Physics.aabb(-bounds.width * 2, 0, bounds.width * 4, bounds.height);
 
+    var player = Physics.body('player', {
+      x: 100,
+      y: bounds.height,
+      restitution: 0.1,
+      mass: 5
+    });
     var playerBehavior = Physics.behavior('player-behavior', { player: player });
 
     // create trash
     var trash = [];
-    for (var i = 0, l = 30; i < l; ++i){
+    for (var i = 0, l = 20; i < l; i++) {
         var ang = 4 * (Math.random() - 0.5) * Math.PI;
         var r = 700 + 100 * Math.random() + i * 10;
 
-        trash.push( Physics.body('trash', {
-            x: 400 + Math.cos( ang ) * r,
-            y: 300 + Math.sin( ang ) * r,
-            vx: 0.03 * Math.sin( ang ),
-            vy: - 0.03 * Math.cos( ang ),
-            angularVelocity: (Math.random() - 0.5) * 0.001,
+        trash.push(Physics.body('trash', {
+            x: -bounds.width*2 + (Math.random() * worldBounds.width),
+            y: 0,
             radius: 50,
             mass: 1,
-            restitution: 0.9
+            restitution: 1.0
         }));
     }
 
-    // blow up anything that touches a laser pulse
+    // handle collisons!!
     world.subscribe('collisions:detected', function( data ){
         var collisions = data.collisions;
-        var col;
-
-        for (var i = 0, l = collisions.length; i < l; ++i){
-            col = collisions[i];
-
-            if (col.bodyA.gameType === 'laser' || col.bodyB.gameType === 'laser'){
-                if ( col.bodyA.blowUp ){
-                    col.bodyA.blowUp();
-                } else if ( col.bodyB.blowUp ){
-                    col.bodyB.blowUp();
-                }
-                else if (col.bodyA.getKicked) {
-                    col.bodyA.getKicked(col);
-                }
-                else if (col.bodyB.getKicked) {
-                    col.bodyB.getKicked(col);
-                }
-                return;
-            }
-        }
     });
 
     // custom rendering like minimap drawing
@@ -141,10 +125,10 @@ require(
       // middle of canvas
       var middle = { 
           x: 0.5 * window.innerWidth, 
-          y: 0.5 * window.innerHeight
+          y: 0.75 * window.innerHeight
       };
       // follow player with camera
-      renderer.options.offset.clone( middle ).vsub( player.state.pos );
+      //renderer.options.offset.clone( middle ).vsub( player.state.pos );
       world.render();
     });
     
@@ -152,10 +136,17 @@ require(
     world.add([
       player,
       playerBehavior,
-      Physics.behavior('newtonian', { strength: 1e-4 }),
+      Physics.behavior('edge-collision-detection', {
+        aabb: worldBounds,
+        restitution: 0.3,
+        cof: 0.99
+      }),
       Physics.behavior('sweep-prune'),
-      Physics.behavior('body-collision-detection'),
-      //Physics.behavior('body-impulse-response'),
+      Physics.behavior('body-collision-detection', {
+        restitution: 0.9
+      }),
+      Physics.behavior('constant-acceleration'),
+      Physics.behavior('body-impulse-response'),
       renderer
     ]);
     world.add(trash);

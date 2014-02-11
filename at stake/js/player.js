@@ -27,8 +27,8 @@ function(
                 var h = playerImg.naturalHeight;
                 var verts = [
                     {x: 0, y: 0},
-                    {x: w, y: 0},
-                    {x: w, y: h},
+                    {x: h, y: 0},
+                    {x: h, y: h},
                     {x: 0, y: h}
                 ];
                 options.vertices = verts; // set up rectangle vertices
@@ -43,19 +43,20 @@ function(
                     return self;
                 }
 
-                var angle = this.state.angular.pos;
-                var scratch = Physics.scratchpad();
-                amount *= 0.0001; // scale the amount to something not so crazy
-                var v = scratch.vector().set(
-                    amount * Math.cos(angle), 
-                    amount * Math.sin(angle) 
-                );
-                this.accelerate(v); // accelerate self
-                scratch.done();
+                //var scratch = Physics.scratchpad();
+                //var xVel = amount * 0.1;
+                //var yVel = 0;
+                //var v = scratch.vector().set(xVel, yVel);
+                //this.state.vel = v;
+                //scratch.done();
+
+                if (amount)
+                this.state.vel._[0] = amount * 0.1;
 
                 // if we're accelerating change the image
                 if (amount){
                     this.view = shipThrustImg;
+                    console.log(this.state);
                 } else {
                     this.view = playerImg;
                 }
