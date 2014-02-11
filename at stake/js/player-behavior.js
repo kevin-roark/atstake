@@ -15,6 +15,8 @@ function(
 
     return Physics.behavior('player-behavior', function( parent ){
 
+        var zeroAngularVel = {pos: 0, vel: 0, acc: 0};
+
         return {
             init: function( options ){
                 var self = this;
@@ -26,20 +28,15 @@ function(
 
                 // events
                 document.addEventListener('keydown', function( e ){
-                    if (self.gameover){
+                    if (self.gameover) {
                         return;
                     }
-                    switch ( e.keyCode ){
-                        case UP_CODE:
-                            self.movePlayer(true);
-                            break;
-                        case DOWN_CODE:
+                    switch (e.keyCode){
+                        case RIGHT_CODE:
+                            self.movePlayer('r');
                             break;
                         case LEFT_CODE:
-                            player.turn( -1 );
-                            break;
-                        case RIGHT_CODE:
-                            player.turn( 1 );
+                            self.movePlayer('l');
                             break;
                         case Z_CODE:
                             player.shoot();
@@ -48,20 +45,15 @@ function(
                     return false;
                 });
                 document.addEventListener('keyup', function( e ){
-                    if (self.gameover){
+                    if (self.gameover) {
                         return;
                     }
-                    switch ( e.keyCode ){
-                        case UP_CODE:
+                    switch (e.keyCode){
+                        case RIGHT_CODE:
                             self.movePlayer(false);
                             break;
-                        case DOWN_CODE:
-                            break;
                         case LEFT_CODE:
-                            player.turn( 0 );
-                            break;
-                        case RIGHT_CODE:
-                            player.turn( 0 );
+                            self.movePlayer(false);
                             break;
                         case SPACE_CODE:
                             break;
@@ -72,7 +64,7 @@ function(
 
             // this is automatically called by the world
             // when this behavior is added to the world
-            connect: function( world ){
+            connect: function(world){
 
                 // we want to subscribe to world events
                 world.subscribe('collisions:detected', this.checkPlayerCollision, this);
@@ -81,7 +73,7 @@ function(
 
             // this is automatically called by the world
             // when this behavior is removed from the world
-            disconnect: function( world ){
+            disconnect: function(world){
 
                 // we want to unsubscribe from world events
                 world.unsubscribe('collisions:detected', this.checkPlayerCollision);
@@ -89,7 +81,7 @@ function(
             },
 
             // check to see if the player has collided
-            checkPlayerCollision: function( data ){
+            checkPlayerCollision: function(data){
 
                 var self = this
                     ,world = self._world
@@ -116,17 +108,21 @@ function(
             },
 
             // toggle player motion
-            movePlayer: function(active){
-                if ( active === false ){
-                    this.playerMove = false;
-                    return;
+            movePlayer: function(direction){
+                if (!direction) {
+                    this.playerMove = 0;
                 }
-                this.playerMove = true;
+                else if (direction == 'l') {
+                    this.playerMove = -1;
+                }
+                else if (direction == 'r') {
+                    this.playerMove = 1;
+                }
             },
 
             behave: function(data){
-                // activate thrusters if playerMove is true
-                this.player.thrust( this.playerMove ? 1 : 0 );
+                this.player.walk(this.playerMove);
+                this.player.state.angular = zeroAngularVel;
             }
         };
     });

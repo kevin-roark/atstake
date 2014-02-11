@@ -10,86 +10,54 @@ function(
     Physics
 ){  
     // extend the circle body
-    Physics.body('player', 'circle', function( parent ){
+    Physics.body('player', 'convex-polygon', function( parent ){
         // private helpers
         var deg = Math.PI/180;
-        var shipImg = new Image();
+        var playerImg = new Image();
         var shipThrustImg = new Image();
-        shipImg.src = require.toUrl('images/ship.png');
-        shipThrustImg.src = require.toUrl('images/ship-thrust.png');
+        playerImg.src = require.toUrl('images/beach_player.png');
+        shipThrustImg.src = require.toUrl('images/beach_player.png');
 
-        var Pi2 = 2 * Math.PI;
-        // VERY crude approximation to a gaussian random number.. but fast
-        var gauss = function gauss( mean, stddev ){
-            var r = 2 * (Math.random() + Math.random() + Math.random()) - 3;
-            return r * stddev + mean;
-        };
-        // will give a random polygon that, for small jitter, will likely be convex
-        var rndPolygon = function rndPolygon( size, n, jitter ){
-            var points = [{ x: 0, y: 0 }]
-                ,ang = 0
-                ,invN = 1 / n
-                ,mean = Pi2 * invN
-                ,stddev = jitter * (invN - 1/(n+1)) * Pi2
-                ,i = 1
-                ,last = points[ 0 ]
-                ;
-
-            while ( i < n ){
-                ang += gauss( mean, stddev );
-                points.push({
-                    x: size * Math.cos( ang ) + last.x,
-                    y: size * Math.sin( ang ) + last.y
-                });
-                last = points[ i++ ];
-            }
-            
-            return points;
-        };
         return {
             // we want to do some setup when the body is created
             // so we need to call the parent's init method
             // on "this"
-            init: function( options ){
-                parent.init.call( this, options );
-                // set the rendering image
-                // because of the image i've chosen, the nose of the ship
-                // will point in the same angle as the body's rotational position
-                this.view = shipImg;
+            init: function(options){
+                var w = playerImg.naturalWidth;
+                var h = playerImg.naturalHeight;
+                var verts = [
+                    {x: 0, y: 0},
+                    {x: w, y: 0},
+                    {x: w, y: h},
+                    {x: 0, y: h}
+                ];
+                options.vertices = verts; // set up rectangle vertices
+
+                parent.init.call(this, options); // call main constructor
+                this.view = playerImg; // set the rendering image
             },
-            // this will turn the ship by changing the
-            // body's angular velocity to + or - some amount
-            turn: function( amount ){
-                // set the ship's rotational velocity
-                this.state.angular.vel = 0.2 * amount * deg;
-                return this;
-            },
-            // this will accelerate the ship along the direction
-            // of the ship's nose
-            thrust: function( amount ){
+            walk: function(amount){
                 var self = this;
                 var world = this._world;
                 if (!world){
                     return self;
                 }
+
                 var angle = this.state.angular.pos;
                 var scratch = Physics.scratchpad();
-                // scale the amount to something not so crazy
-                amount *= 0.0001;
-                // point the acceleration in the direction of the ship's nose
+                amount *= 0.0001; // scale the amount to something not so crazy
                 var v = scratch.vector().set(
-                    amount * Math.cos( angle ), 
-                    amount * Math.sin( angle ) 
+                    amount * Math.cos(angle), 
+                    amount * Math.sin(angle) 
                 );
-                // accelerate self
-                this.accelerate( v );
+                this.accelerate(v); // accelerate self
                 scratch.done();
 
-                // if we're accelerating set the image to the one with the thrusters on
-                if ( amount ){
+                // if we're accelerating change the image
+                if (amount){
                     this.view = shipThrustImg;
                 } else {
-                    this.view = shipImg;
+                    this.view = playerImg;
                 }
                 return self;
             },
