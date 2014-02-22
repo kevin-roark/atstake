@@ -9,10 +9,12 @@ html, body {
 body {
   background-image: url(../images/iceweasel_background.png);
   background-repeat: repeat;
+  text-align: center;
+  font-family: Helvetica, sans-serif;
 }
 
   body.before-game:after {
-    content: 'press "z" to start';
+    content: '';
   }
 
   body.lose-game:after {
@@ -28,7 +30,6 @@ body {
     line-height: 140px;
     text-align: center;
     color: rgb(60, 16, 11);
-    background: rgba(255, 255, 255, 0.6);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -38,3 +39,29 @@ body {
     margin-top: -70px;
     border-radius: 5px;
   }
+
+.eow-timer {
+  position: absolute;
+  font-size: 144px;
+  font-weight: 100;
+  top: 50px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  color: #222;
+}
+
+.at-stake {
+  position: absolute;
+  font-size: 164px;
+  font-weight: 100;
+  top: 250px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  color: rgba(30, 30, 240, 1);
+  background-color: rgba(240, 30, 30, 1);
+  font-style: italic;
+}

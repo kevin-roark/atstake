@@ -33,8 +33,6 @@ require(
   require,
   Physics
 ){
-  var Z_CODE = 90;
-
   document.body.className = 'before-game';
 
   var bounds;
@@ -48,13 +46,13 @@ require(
 
   var inGame = false;
 
-  document.addEventListener('keydown', function(e){
-    if (!inGame && e.keyCode === Z_CODE) {
+  setTimeout(function(e){
+    $('.at-stake').fadeOut(1500, function() {
       document.body.className = 'in-game';
       inGame = true;
       newGame();
-    }
-  });
+    });
+  }, 2000);
   
   var renderer = Physics.renderer('canvas', {
     el: 'viewport',
