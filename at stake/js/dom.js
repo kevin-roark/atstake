@@ -20,7 +20,7 @@ $(function() {
             timeLeft -= 1;
             setTimeDisplay(timeLeft);
             if (timeLeft == 60) {
-                timeLeft.css('color', 'rgba(250, 20, 20, 1)');
+                timerDiv.css('color', 'rgba(250, 20, 20, 1)');
             }
             else if (timeLeft <= 0) {
                 clearInterval(eowTimer);

@@ -8,11 +8,14 @@ function(
     require,
     Physics
 ){
-    var TRASH_IMAGES = ['images/ufo.png'];
+    var TRASH_IMAGES = [
+        'images/trash/1.png', 
+        'images/trash/2.png',
+        'images/trash/3.png',
+        'images/trash/4.png'
+    ];
 
     Physics.body('trash', 'circle', function( parent ){
-        var ast1 = new Image();
-        ast1.src = require.toUrl('images/ufo.png');
 
         return {
             init: function( options ){

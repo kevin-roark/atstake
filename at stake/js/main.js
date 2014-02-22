@@ -104,7 +104,7 @@ require(
         trash.push(Physics.body('trash', {
             x: x,
             y: bounds.height - 50,
-            radius: 50,
+            radius: 75,
             mass: 0.001,
             restitution: 1.0
         }));
