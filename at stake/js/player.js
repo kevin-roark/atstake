@@ -19,24 +19,26 @@ function(
         flippedPlayerImg.src = require.toUrl('images/beach_player_flipped.png');
 
         return {
-            // we want to do some setup when the body is created
-            // so we need to call the parent's init method
-            // on "this"
             init: function(options){
                 var w = playerImg.naturalWidth;
                 var h = playerImg.naturalHeight;
                 var verts = [
                     {x: 0, y: 0},
-                    {x: h, y: 0},
-                    {x: h, y: h},
+                    {x: w, y: 0},
+                    {x: w, y: h},
                     {x: 0, y: h}
                 ];
                 options.vertices = verts; // set up rectangle vertices
 
-                parent.init.call(this, options); // call main constructor
+                parent.init.call(this, options); // call main constructor for body
+
+                console.log(this);
 
                 this.view = playerImg; // set the rendering image
+
+                this.walking = false;
             },
+
             walk: function(amount){
                 var self = this;
                 var world = this._world;
@@ -51,15 +53,20 @@ function(
                 //this.state.vel = v;
                 //scratch.done();
 
-                if (amount)
-                    this.state.vel._[0] = amount * 0.1;
+                if (amount) {
+                    self.state.vel.set(amount * 0.1, 0);
+                    this.walking = true;
+                }
+                else {
+                    this.walking = false;
+                }
 
                 if (amount < 0) {
                     this.view = flippedPlayerImg;
                 } else if (amount > 0) {
                     this.view = playerImg;
                 }
-                
+
                 return self;
             },
 
@@ -70,6 +77,15 @@ function(
                   return self;
 
                 self.state.vel.set(0, -0.3);
+            },
+
+            kick: function() {
+                var self = this;
+                if (self.view == playerImg) {
+                  // kick right
+                } else {
+                  // kick left
+                }
             },
 
             // this will create a projectile (little circle)
@@ -106,6 +122,7 @@ function(
                 world.add( laser );
                 return self;
             },
+
             // 'splode! This will remove the ship
             // and replace it with a bunch of random
             // triangles for an explosive effect!

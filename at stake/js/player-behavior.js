@@ -121,17 +121,18 @@ function(
                 else if (direction == 'r') {
                     this.playerMove = 1;
                 }
+                console.log(this.player);
             },
 
             // do a little jump
             jump: function() {
                 this.player.jump();
-                this.movePlayer(false);
             },
 
             behave: function(data){
                 this.player.walk(this.playerMove);
                 this.player.state.angular = zeroAngularVel;
+                this.player.state.old.angular = zeroAngularVel;
             }
         };
     });

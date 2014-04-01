@@ -93,8 +93,8 @@ require(
 
     var player = Physics.body('player', {
       x: playerX,
-      y: bounds.height - 50,
-      restitution: 0.0,
+      y: bounds.height - 250,
+      restitution: 0.1,
       mass: 1
     });
     var playerBehavior = Physics.behavior('player-behavior', { player: player });
@@ -111,7 +111,7 @@ require(
             x: x,
             y: bounds.height - 75,
             radius: 75,
-            mass: 0.001,
+            mass: 0.0001,
             restitution: 1.0
         }));
     }

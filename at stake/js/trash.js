@@ -9,7 +9,7 @@ function(
     Physics
 ){
     var TRASH_IMAGES = [
-        'images/trash/1.png', 
+        'images/trash/1.png',
         'images/trash/2.png',
         'images/trash/3.png',
         'images/trash/4.png'
@@ -29,7 +29,7 @@ function(
                 this.gameType = 'trash';
             },
             getKicked: function(collisionDetails) {
-                /*
+
                 var self = this;
                 var world = self._world;
                 if (!world) {
@@ -50,7 +50,7 @@ function(
 
                 self.accelerate(accelerationVector);
                 scratch.done();
-                */
+                
                 return this;
             }
         };
