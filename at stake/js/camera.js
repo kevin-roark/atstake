@@ -1,9 +1,9 @@
 define(
 [
     'require',
-    'js/jquery.min'
+    'js/lib/jquery.min'
 ],
-function(require, Physics) { 
+function(require, Physics) {
   $(function() {
 
     var LEFT_CODE = 37;

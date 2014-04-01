@@ -38,6 +38,9 @@ function(
                         case LEFT_CODE:
                             self.movePlayer('l');
                             break;
+                        case UP_CODE:
+                            self.jump();
+                            break;
                         case Z_CODE:
                             player.shoot();
                             break;
@@ -118,6 +121,12 @@ function(
                 else if (direction == 'r') {
                     this.playerMove = 1;
                 }
+            },
+
+            // do a little jump
+            jump: function() {
+                this.player.jump();
+                this.movePlayer(false);
             },
 
             behave: function(data){

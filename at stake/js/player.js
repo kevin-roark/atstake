@@ -8,15 +8,15 @@ define(
 function(
     require,
     Physics
-){  
+){
     // extend the circle body
     Physics.body('player', 'convex-polygon', function( parent ){
         // private helpers
         var deg = Math.PI/180;
         var playerImg = new Image();
-        var shipThrustImg = new Image();
+        var flippedPlayerImg = new Image();
         playerImg.src = require.toUrl('images/beach_player.png');
-        shipThrustImg.src = require.toUrl('images/beach_player.png');
+        flippedPlayerImg.src = require.toUrl('images/beach_player_flipped.png');
 
         return {
             // we want to do some setup when the body is created
@@ -34,6 +34,7 @@ function(
                 options.vertices = verts; // set up rectangle vertices
 
                 parent.init.call(this, options); // call main constructor
+
                 this.view = playerImg; // set the rendering image
             },
             walk: function(amount){
@@ -51,16 +52,26 @@ function(
                 //scratch.done();
 
                 if (amount)
-                this.state.vel._[0] = amount * 0.1;
+                    this.state.vel._[0] = amount * 0.1;
 
-                // if we're accelerating change the image
-                if (amount){
-                    this.view = shipThrustImg;
-                } else {
+                if (amount < 0) {
+                    this.view = flippedPlayerImg;
+                } else if (amount > 0) {
                     this.view = playerImg;
                 }
+                
                 return self;
             },
+
+            jump: function() {
+                var self = this;
+                var world = self._world;
+                if (!world)
+                  return self;
+
+                self.state.vel.set(0, -0.3);
+            },
+
             // this will create a projectile (little circle)
             // that travels away from the ship's front.
             // It will get removed after a timeout
