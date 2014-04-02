@@ -4,7 +4,7 @@ $(function() {
 
     var timerDiv = $('.eow-timer');
     var timeLeft = 180;
-    
+
     function setTimeDisplay(seconds) {
         var m = Math.floor(seconds / 60);
         var s = '' + (seconds % 60);
@@ -27,6 +27,5 @@ $(function() {
             }
         }, 1000);
     }, INIT_WAIT);
-    
 
 });

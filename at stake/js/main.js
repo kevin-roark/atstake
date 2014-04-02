@@ -129,6 +129,11 @@ require(
 
     });
 
+    // end of the game
+    world.subscribe('endgame', function() {
+      console.log('ending game...');
+    });
+
     // render on every step
     world.subscribe('step', function(){
       // middle of canvas
@@ -181,6 +186,10 @@ require(
       document.body.className = 'win-game';
       inGame = false;
     });
+
+    setTimeout(function() {
+      world.publish('endgame');
+    }, (180 + 4) * 1000);
   };
 
   // subscribe to ticker and start looping

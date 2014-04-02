@@ -121,7 +121,6 @@ function(
                 else if (direction == 'r') {
                     this.playerMove = 1;
                 }
-                console.log(this.player);
             },
 
             // do a little jump
