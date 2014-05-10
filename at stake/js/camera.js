@@ -8,6 +8,7 @@ function(require, Physics) {
 
     var LEFT_CODE = 37;
     var RIGHT_CODE = 39;
+    var Z_CODE = 90;
 
     var body = $('body');
     var background = new Image();
@@ -45,6 +46,30 @@ function(require, Physics) {
             timer = setInterval(function() {
               moveBackground(-1);
             }, 25);
+            break;
+          case Z_CODE:
+            currentKey = 'garbage you cant stop it';
+            clearInterval(timer);
+            timer = setInterval(function() {
+              moveBackground(2)
+            }, 5);
+            setTimeout(function() {
+              clearInterval(timer);
+              timer = setInterval(function() {
+                moveBackground(-4);
+              }, 5);
+              setTimeout(function() {
+                clearInterval(timer);
+                timer = setInterval(function() {
+                  moveBackground(2);
+                }, 5);
+                setTimeout(function() {
+                  clearInterval(timer);
+                  timer = null;
+                  currentKey = null;
+                }, 100);
+              }, 100);
+            }, 100);
             break;
         }
       }

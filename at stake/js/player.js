@@ -42,7 +42,7 @@ function(
             walk: function(amount){
                 var self = this;
                 var world = this._world;
-                if (!world){
+                if (!world || self.kicking){
                     return self;
                 }
 
@@ -79,13 +79,40 @@ function(
                 self.state.vel.set(0, -0.3);
             },
 
+            // moves the player right and left real fast
             kick: function() {
-                var self = this;
-                if (self.view == playerImg) {
-                  // kick right
-                } else {
-                  // kick left
-                }
+              var self = this;
+              var world = this._world;
+              if (!world){
+                  return self;
+              }
+
+              self.kicking = true;
+              self.state.vel.set(0.8, 0);
+
+              var $v = $('body');
+              $v.css('-webkit-filter', 'blur(40px)');
+              $v.css('-moz-filter', 'blur(40px)');
+              $v.css('-ms-filter', 'blur(40px)');
+              $v.css('-o-filter', 'blur(40px)');
+              $v.css('filter', 'blur(40px)');
+
+              setTimeout(function() {
+                self.state.vel.set(-1.6, 0);
+                setTimeout(function() {
+                  self.state.vel.set(0.8, 0);
+                  setTimeout(function() {
+                    self.state.vel.set(0, 0);
+                    self.kicking = false;
+
+                    $v.css('-webkit-filter', 'none');
+                    $v.css('-moz-filter', 'none');
+                    $v.css('-ms-filter', 'none');
+                    $v.css('-o-filter', 'none');
+                    $v.css('filter', 'none');
+                  }, 100);
+                }, 100);
+              }, 100);
             },
 
             // this will create a projectile (little circle)

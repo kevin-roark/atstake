@@ -32,20 +32,26 @@ function(
                 this.gameType = 'trash';
             },
             getKicked: function(collisionDetails) {
-
                 var self = this;
                 var world = self._world;
                 if (!world) {
                     return self;
                 }
 
-                var accel = 0.05;
+                var accel = 0.044;
                 var angle;
                 if (self === collisionDetails.bodyA) {
                     angle = Math.atan2(collisionDetails.norm.y, -collisionDetails.norm.x);
                 }
                 else {
                     angle = Math.atan2(collisionDetails.norm.y, collisionDetails.norm.x);
+                }
+
+                // lets make it upwards a bit
+                if (angle < 0) {
+                  angle += 0.8;
+                } else {
+                  angle -= 0.8;
                 }
 
                 var scratch = Physics.scratchpad();

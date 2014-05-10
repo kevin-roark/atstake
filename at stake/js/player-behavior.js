@@ -42,7 +42,7 @@ function(
                             self.jump();
                             break;
                         case Z_CODE:
-                            player.shoot();
+                            player.kick();
                             break;
                     }
                     return false;
