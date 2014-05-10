@@ -11,7 +11,7 @@ function(require, Physics) {
 
     var body = $('body');
     var background = new Image();
-    background.src = require.toUrl('images/iceweasel_background.png');
+    background.src = require.toUrl('images/country_bg.png');
 
     var maxWidth = background.width;
     var curBackgroundX = 0;

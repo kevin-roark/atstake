@@ -8,4 +8,3 @@ TODO:
  * overlay game over any web page (lol different project?)
  * add kick to human
  * animation at the end
- * construct actual background

@@ -9,10 +9,13 @@ function(
     Physics
 ){
     var TRASH_IMAGES = [
-        'images/trash/1.png',
         'images/trash/2.png',
         'images/trash/3.png',
-        'images/trash/4.png'
+        'images/trash/4.png',
+        'images/trash/5.png',
+        'images/trash/6.png',
+        'images/trash/7.png',
+        'images/trash/8.png'
     ];
 
     Physics.body('trash', 'circle', function( parent ){
@@ -50,7 +53,7 @@ function(
 
                 self.accelerate(accelerationVector);
                 scratch.done();
-                
+
                 return this;
             }
         };
