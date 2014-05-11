@@ -10,7 +10,7 @@ function(require, Physics) {
     var RIGHT_CODE = 39;
     var Z_CODE = 90;
 
-    var body = $('body');
+    var body = $('.overlay');
     var background = new Image();
     background.src = require.toUrl('images/country_bg.png');
 

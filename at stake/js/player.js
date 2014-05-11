@@ -32,8 +32,6 @@ function(
 
                 parent.init.call(this, options); // call main constructor for body
 
-                console.log(this);
-
                 this.view = playerImg; // set the rendering image
 
                 this.walking = false;
@@ -88,9 +86,9 @@ function(
               }
 
               self.kicking = true;
-              self.state.vel.set(0.8, 0);
+              self.state.vel.set(1.2, 0);
 
-              var $v = $('body');
+              var $v = $('canvas');
               $v.css('-webkit-filter', 'blur(40px)');
               $v.css('-moz-filter', 'blur(40px)');
               $v.css('-ms-filter', 'blur(40px)');
@@ -98,9 +96,9 @@ function(
               $v.css('filter', 'blur(40px)');
 
               setTimeout(function() {
-                self.state.vel.set(-1.6, 0);
+                self.state.vel.set(-2.4, 0);
                 setTimeout(function() {
-                  self.state.vel.set(0.8, 0);
+                  self.state.vel.set(1.2, 0);
                   setTimeout(function() {
                     self.state.vel.set(0, 0);
                     self.kicking = false;
@@ -115,39 +113,14 @@ function(
               }, 100);
             },
 
-            // this will create a projectile (little circle)
-            // that travels away from the ship's front.
-            // It will get removed after a timeout
-            shoot: function(){
-                var self = this;
-                var world = this._world;
-                if (!world){
-                    return self;
-                }
-                var angle = this.state.angular.pos;
-                var cos = Math.cos( angle );
-                var sin = Math.sin( angle );
-                var r = this.geometry.radius + 5;
-                // create a little circle at the nose of the ship
-                // that is traveling at a velocity of 0.5 in the nose direction
-                // relative to the ship's current velocity
-                var laser = Physics.body('circle', {
-                    x: this.state.pos.get(0) + r * cos,
-                    y: this.state.pos.get(1) + r * sin,
-                    vx: (0.5 + this.state.vel.get(0)) * cos,
-                    vy: (0.5 + this.state.vel.get(1)) * sin,
-                    radius: 2
-                });
-                // set a custom property for collision purposes
-                laser.gameType = 'laser';
+            fallDown: function() {
+              var self = this;
+              var world = this._world;
+              if (!world){
+                  return self;
+              }
 
-                // remove the laser pulse later
-                setTimeout(function(){
-                    world.removeBody( laser );
-                    laser = undefined;
-                }, 1500);
-                world.add( laser );
-                return self;
+              self.state.angular.acc = 0.04;
             },
 
             // 'splode! This will remove the ship
