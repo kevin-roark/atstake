@@ -72,6 +72,19 @@ require(
   noise.loop = true;
 
   song.addEventListener('canplaythrough', function() {
+    loaded();
+  });
+
+  setTimeout(function() {
+    // simulate background image load :/
+    loaded();
+  }, 3000);
+
+  var thingsLoaded = 0;
+  var thingsToLoad = 2;
+  function loaded() {
+    if (++thingsLoaded < thingsToLoad) return;
+
     song.currentTime = 4.2;
 
     if (songContext) {
@@ -87,7 +100,7 @@ require(
     }
 
     $('.start-button').fadeIn();
-  });
+  }
 
   $('.start-button').click(function() {
     $(this).fadeOut();
