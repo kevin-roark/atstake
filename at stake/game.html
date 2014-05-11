@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/main.css">
+    <title>at stake - game about something</title>
 </head>
 <body>
     <div class="eow-timer">3:00</div>
@@ -10,6 +11,16 @@
     <div class="start-button">Begin game</div>
     <div class="instructions">arrows | move
      z | kick</div>
+
+    <audio id="noise" preload autoplay>
+      <source src="media/noisy.ogg" type="audio/ogg">
+      <source src="media/noisy.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="song" preload>
+      <source src="media/country_survival.ogg" type="audio/ogg">
+      <source src="media/country_survival.mp3" type="audio/mpeg">
+    </audio>
 
     <script src="js/lib/require.min.js"></script>
     <script src="js/lib/jquery.min.js"></script>

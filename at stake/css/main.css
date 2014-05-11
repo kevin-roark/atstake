@@ -9,6 +9,7 @@ html, body {
 .overlay {
   background-image: url(../images/country_bg.png);
   background-repeat: repeat;
+  background-size: 7720px 100%;
   position: fixed;
   top: 0;
   left: 0;
@@ -19,11 +20,11 @@ html, body {
 
 .start-button {
   position: fixed;
-  top: 30%;
+  top: 100px;
   left: 25%;
   width: 50%;
-  height: 300px;
-  line-height: 300px;
+  height: 250px;
+  line-height: 250px;
   background-color: rgba(0, 0, 0, 0.05);
   border: 2px solid white;
   color: white;
@@ -31,6 +32,7 @@ html, body {
   text-align: center;
   cursor: pointer;
   z-index: 10000;
+  display: none;
 }
   .start-button:hover {
     color: #ededed;
@@ -39,7 +41,7 @@ html, body {
 
 .instructions {
   position: fixed;
-  bottom: 60px;
+  top: 400px;
   left: 25%;
   width: 50%;
   padding: 20px 0px;

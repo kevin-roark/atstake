@@ -51,17 +51,17 @@ function(require, Physics) {
             currentKey = 'garbage you cant stop it';
             clearInterval(timer);
             timer = setInterval(function() {
-              moveBackground(2)
+              moveBackground(3)
             }, 5);
             setTimeout(function() {
               clearInterval(timer);
               timer = setInterval(function() {
-                moveBackground(-4);
+                moveBackground(-6);
               }, 5);
               setTimeout(function() {
                 clearInterval(timer);
                 timer = setInterval(function() {
-                  moveBackground(2);
+                  moveBackground(3);
                 }, 5);
                 setTimeout(function() {
                   clearInterval(timer);

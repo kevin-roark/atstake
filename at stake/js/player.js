@@ -85,8 +85,10 @@ function(
                   return self;
               }
 
+              var initVel = 1.5;
+
               self.kicking = true;
-              self.state.vel.set(1.2, 0);
+              self.state.vel.set(initVel, 0);
 
               var $v = $('canvas');
               $v.css('-webkit-filter', 'blur(40px)');
@@ -96,9 +98,9 @@ function(
               $v.css('filter', 'blur(40px)');
 
               setTimeout(function() {
-                self.state.vel.set(-2.4, 0);
+                self.state.vel.set(-initVel * 2, 0);
                 setTimeout(function() {
-                  self.state.vel.set(1.2, 0);
+                  self.state.vel.set(initVel, 0);
                   setTimeout(function() {
                     self.state.vel.set(0, 0);
                     self.kicking = false;

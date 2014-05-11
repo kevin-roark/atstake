@@ -20,6 +20,8 @@ function(
         return {
             init: function( options ){
                 var self = this;
+                self.jumpLevel = 0;
+
                 parent.init.call(this, options);
                 // the player will be passed in via the config options
                 // so we need to store the player
@@ -112,7 +114,7 @@ function(
 
             // toggle player motion
             movePlayer: function(direction){
-                if (!direction) {
+                if (!direction || this.jumpLevel > 1) {
                     this.playerMove = 0;
                 }
                 else if (direction == 'l') {
@@ -125,7 +127,14 @@ function(
 
             // do a little jump
             jump: function() {
-                this.player.jump();
+                var self = this;
+                if (self.jumpLevel < 2) {
+                  self.jumpLevel += 1;
+                  self.player.jump();
+                  setTimeout(function() {
+                    self.jumpLevel -= 1;
+                  }, 1350);
+                }
             },
 
             behave: function(data){

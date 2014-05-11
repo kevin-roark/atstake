@@ -39,8 +39,8 @@ require(
   var bounds;
   function set_bounds() {
     bounds = {
-      width: window.innerWidth,
-      height: Math.min(700, window.innerHeight)
+      width: window.innerWidth * 3,
+      height: Math.min(750, window.innerHeight)
     };
   }
   set_bounds();
@@ -50,23 +50,130 @@ require(
   var zoomAmt = 1;
   var player;
 
+  var songActive = true;
+
+  var song = document.querySelector('#song');
+  var $song = $(song);
+  var songSource, songContext;
+  var songFilter1;
+  song.volume = 0.9;
+  song.loop = true;
+
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  try {
+     songContext = new AudioContext();
+  } catch(e) {
+    songContext = null;
+  }
+
+  var noise = document.querySelector('#noise');
+  var $noise = $(noise);
+  noise.volume = 0.05;
+  noise.loop = true;
+
+  song.addEventListener('canplaythrough', function() {
+    song.currentTime = 4.2;
+
+    if (songContext) {
+      songSource = songContext.createMediaElementSource(song);
+      songFilter1 = songContext.createBiquadFilter();
+
+      songSource.connect(songFilter1);
+
+      songFilter1.connect(songContext.destination);
+
+      songFilter1.type = 0; // Low-pass filter. See BiquadFilterNode docs
+      songFilter1.frequency.value = 20000;
+    }
+
+    $('.start-button').fadeIn();
+  });
+
   $('.start-button').click(function() {
     $(this).fadeOut();
     $('.instructions').fadeOut();
     setTimeout(function() {
       $('.at-stake').fadeIn(200, function() {
+        song.play();
+        noise.pause();
         setTimeout(function() {
           $('.at-stake').fadeOut(1500, function() {
-            document.body.className = 'in-game';
-            $('.eow-timer').show();
-            startTimer();
-            inGame = true;
-            newGame();
+            startGame();
           });
-        }, 2000);
+        }, 2500);
       });
     }, 800);
   });
+
+  function startGame() {
+    document.body.className = 'in-game';
+    $('.eow-timer').show();
+    startTimer();
+    inGame = true;
+    newGame();
+
+    setTimeout(function() {
+      warpAudio();
+    }, 46666);
+  }
+
+  function warpAudio() {
+    songActive = true;
+    changeTime();
+    changeFilter();
+
+    setTimeout(function() {
+      normalize();
+      setTimeout(function() {
+        warpAudio();
+      }, Math.floor(Math.random() * 6666 + 5000))
+    }, Math.floor(Math.random() * 14666 + 5000));
+
+    function changeTime() {
+      if (!songActive) return;
+
+      var p = Math.random();
+      if (p < 0.5) { // slow
+        var rate = (Math.random() * 0.4) + 0.5;
+      } else { // fast
+        var rate = (Math.random()) + 1.0;
+      }
+
+      song.playbackRate = rate;
+
+      var next = Math.floor(Math.random() * 6000 + 2000);
+      setTimeout(changeTime, next);
+    }
+
+    function changeFilter() {
+      if (!songActive) return;
+
+      var p = Math.random();
+      if (p < 0.5) {
+        var t = 0;  // low-pass
+        var f = Math.floor(Math.random() * 800) + 20;
+      } else {
+        var t = 1; // high-pass
+        var f = Math.floor(Math.random() * 6500) + 500;
+      }
+
+      songFilter1.type = t;
+      songFilter1.frequency.value = f;
+
+      var next = Math.floor(Math.random() * 2000 + 200);
+      if (songActive) setTimeout(changeFilter, next);
+    }
+
+    function normalize() {
+      songActive = false;
+
+      songFilter1.type = 0;
+      songFilter1.frequency.value = 20000;
+
+      song.playbackRate = 1.0;
+    }
+
+  }
 
   var renderer = Physics.renderer('canvas', {
     el: 'viewport',
@@ -130,11 +237,8 @@ require(
     }
 
     // handle collisons!!
-    var shouldLog = true;
     world.subscribe('collisions:detected', function( data ){
         var collisions = data.collisions;
-        if (shouldLog) console.log(collisions);
-        shouldLog = false;
     });
 
     // custom rendering like minimap drawing
@@ -145,10 +249,14 @@ require(
     // end of the game
     world.subscribe('endgame', function() {
       player.fallDown();
+      noise.volume = 0.05;
+      noise.play();
 
       zoomTimer = setInterval(function() {
         zoom(zoomAmt);
         zoomAmt *= 0.999;
+        noise.volume *= 0.9993;
+        song.volume *= 0.9993;
       }, 20);
     });
 
@@ -217,7 +325,7 @@ require(
 
     setTimeout(function() {
       world.publish('endgame');
-    }, (180 + 4) * 1000);
+    }, (180) * 1000);
   };
 
   function startTimer() {
