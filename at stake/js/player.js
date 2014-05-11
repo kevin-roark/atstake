@@ -91,11 +91,11 @@ function(
               self.state.vel.set(initVel, 0);
 
               var $v = $('canvas');
-              $v.css('-webkit-filter', 'blur(40px)');
-              $v.css('-moz-filter', 'blur(40px)');
-              $v.css('-ms-filter', 'blur(40px)');
-              $v.css('-o-filter', 'blur(40px)');
-              $v.css('filter', 'blur(40px)');
+              $v.css('-webkit-filter', 'blur(4px)');
+              $v.css('-moz-filter', 'blur(4px)');
+              $v.css('-ms-filter', 'blur(4px)');
+              $v.css('-o-filter', 'blur(4px)');
+              $v.css('filter', 'blur(4px)');
 
               setTimeout(function() {
                 self.state.vel.set(-initVel * 2, 0);

@@ -40,7 +40,7 @@ require(
   function set_bounds() {
     bounds = {
       width: window.innerWidth * 3,
-      height: Math.min(750, window.innerHeight)
+      height: window.innerHeight - 60
     };
   }
   set_bounds();
@@ -221,7 +221,7 @@ require(
 
     // create trash
     var trash = [];
-    for (var i = 0, l = 20; i < l; i++) {
+    for (var i = 0, l = 30; i < l; i++) {
         var x = playerX;
         while (Math.abs(x - playerX) < 200) {
           x = worldX + (Math.random() * worldWidth);

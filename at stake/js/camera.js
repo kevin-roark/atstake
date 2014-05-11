@@ -48,20 +48,21 @@ function(require, Physics) {
             }, 25);
             break;
           case Z_CODE:
+            var amt = 10;
             currentKey = 'garbage you cant stop it';
             clearInterval(timer);
             timer = setInterval(function() {
-              moveBackground(3)
+              moveBackground(amt)
             }, 5);
             setTimeout(function() {
               clearInterval(timer);
               timer = setInterval(function() {
-                moveBackground(-6);
+                moveBackground(-2 * amt);
               }, 5);
               setTimeout(function() {
                 clearInterval(timer);
                 timer = setInterval(function() {
-                  moveBackground(3);
+                  moveBackground(amt);
                 }, 5);
                 setTimeout(function() {
                   clearInterval(timer);
