@@ -139,8 +139,8 @@ require(
       normalize();
       setTimeout(function() {
         warpAudio();
-      }, Math.floor(Math.random() * 6666 + 5000))
-    }, Math.floor(Math.random() * 14666 + 5000));
+      }, Math.floor(Math.random() * 6666 + 3333))
+    }, Math.floor(Math.random() * 5666 + 1000));
 
     function changeTime() {
       if (!songActive) return;
@@ -154,7 +154,7 @@ require(
 
       song.playbackRate = rate;
 
-      var next = Math.floor(Math.random() * 6000 + 2000);
+      var next = Math.floor(Math.random() * 6000 + 100);
       setTimeout(changeTime, next);
     }
 
@@ -164,16 +164,16 @@ require(
       var p = Math.random();
       if (p < 0.5) {
         var t = 0;  // low-pass
-        var f = Math.floor(Math.random() * 800) + 20;
+        var f = Math.floor(Math.random() * 1000) + 60;
       } else {
         var t = 1; // high-pass
-        var f = Math.floor(Math.random() * 6500) + 500;
+        var f = Math.floor(Math.random() * 5500) + 400;
       }
 
       songFilter1.type = t;
       songFilter1.frequency.value = f;
 
-      var next = Math.floor(Math.random() * 2000 + 200);
+      var next = Math.floor(Math.random() * 700 + 30);
       if (songActive) setTimeout(changeFilter, next);
     }
 
